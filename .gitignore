@@ -1,0 +1,11 @@
+cpp/tmp
+include/tmp
+lib/*.dylib
+lib/mocs/
+lib/objects/
+trkcontroler/mocs/
+trkcontroler/objects/
+trkcontroler/cpp/tmp
+trkcontroler/cpp/tmpdir/
+trkcontroler/trkcontroler.app
+trkviewer/
