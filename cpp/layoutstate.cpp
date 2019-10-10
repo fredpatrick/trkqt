@@ -429,13 +429,18 @@ void
 trk::LayoutState::
 new_switch_event(SwitchEvent* event)
 {
+    if ( startup_ ) return;
     if ( dbg_->check(2) ) {
         *dbg_<< tm_event_ << "LayoutState.new_switch_event, ##############################" 
                          << " name = " << event->switch_name() << "-" << 
                          event->state() << trk::endl;
     }
     int swn = event->sw_num();
+    std::cout << "LayoutState, new_switch_event, swn = " << swn 
+               << ", current_path_ = " << current_path_ << std::endl;
     int exit_switch_index = current_path_->exit_switch_index();
+    std::cout << "LayoutState, new_switch_event, exit_switch_index = " 
+                                          << exit_switch_index << std::endl;
     bool is_exit = false;
     switches_[swn]->switch_event(event);
     switch_states_[swn] = event->state();

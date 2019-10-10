@@ -77,6 +77,7 @@ namespace trk {
         public slots:
             void              connect_to_BBB();
             void              disconnect_from_BBB();
+            void              shutdown_BBB_client();
             void              socket_connected();
             void              ini_packet_received(IniPacket* ip);
         private slots:
@@ -102,6 +103,7 @@ namespace trk {
             QPushButton*      connect_button_;
             QPushButton*      disconnect_button_;
             QPushButton*      quit_button_;
+            QPushButton*      shutdown_button_;
     };
 
 }

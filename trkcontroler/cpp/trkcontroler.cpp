@@ -145,14 +145,17 @@ TrkControler(QWidget *parent) : QDialog(parent)
     connect_button_ = new QPushButton(tr("Connect") );
     disconnect_button_ = new QPushButton(tr("Disconnect") );
     quit_button_ = new QPushButton(tr("Quit") );
+    shutdown_button_ = new QPushButton(tr("Shutdown") );
     disconnect_button_->setEnabled(false);
     dialog_bb_ = new QDialogButtonBox;
     dialog_bb_->addButton(connect_button_, QDialogButtonBox::ActionRole);
     dialog_bb_->addButton(disconnect_button_, QDialogButtonBox::ActionRole);
     dialog_bb_->addButton(quit_button_, QDialogButtonBox::RejectRole);
+    dialog_bb_->addButton(shutdown_button_, QDialogButtonBox::RejectRole);
     connect(connect_button_, SIGNAL(clicked()), this, SLOT(connect_to_BBB()) );
     connect(disconnect_button_, SIGNAL(clicked()), this, SLOT(disconnect_from_BBB()) );
     connect(quit_button_, SIGNAL(clicked()), this, SLOT(disconnect_from_BBB()) );
+    connect(shutdown_button_, SIGNAL(clicked()), this, SLOT(shutdown_BBB_client()) );
     dialog_layout->addWidget(main_group, 0);
     dialog_layout->addWidget(dialog_bb_, 0);
     setLayout(dialog_layout);
@@ -250,13 +253,26 @@ eventlog()
     eventlog_button_->setEnabled(false);
 }
 
-
 void
 trk::TrkControler::
 disconnect_from_BBB()
 {
     if ( socket_client_ ) {
         CmdPacket* cmd = new CmdPacket("break", "", 0);
+        cmd->write(socket_client_);
+    }
+    delete socket_client_;
+    if ( eventlog_ ) eventlog_->close();
+    if ( trkviewer_) trkviewer_->close();
+    close();
+}
+
+void
+trk::TrkControler::
+shutdown_BBB_client()
+{
+    if ( socket_client_ ) {
+        CmdPacket* cmd = new CmdPacket("shutdown", "", 0);
         cmd->write(socket_client_);
     }
     delete socket_client_;
